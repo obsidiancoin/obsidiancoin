@@ -997,7 +997,7 @@ void ThreadSocketHandler2(void* parg)
 // The first name is used as information source for addrman.
 // The second name should resolve to a list of seed addresses.
 static const char *strDNSSeed[][2] = {
-    {"andarazoroflove", "andarazoroflove.org"},
+    {"null", "null"},
 };
 
 void ThreadDNSAddressSeed(void* parg)
@@ -1671,11 +1671,11 @@ void StartNode(void* parg)
     // Start threads
     //
 
-    if (!GetBoolArg("-dnsseed", true))
+//    if (!GetBoolArg("-dnsseed", true))
         printf("DNS seeding disabled\n");
-    else
-        if (!CreateThread(ThreadDNSAddressSeed, NULL))
-            printf("Error: CreateThread(ThreadDNSAddressSeed) failed\n");
+//    else
+//        if (!CreateThread(ThreadDNSAddressSeed, NULL))
+//            printf("Error: CreateThread(ThreadDNSAddressSeed) failed\n");
 
 
     // Get addresses from IRC and advertise ours
