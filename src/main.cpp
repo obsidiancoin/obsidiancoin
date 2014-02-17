@@ -12,6 +12,8 @@
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
+#include <stdlib.h>
+#include <time.h>
 
 using namespace std;
 using namespace boost;
@@ -828,13 +830,41 @@ uint256 static GetOrphanRoot(const CBlock* pblock)
 
 int64 static GetBlockValue(int nHeight, int64 nFees)
 {
-    int64 nSubsidy = 1 * COIN;
+    int bigPayout = 10000;
+    int medPayout = 1000;
+    int smallPayout = 100;
+    int defPayout = 1;
+
+    int64 nSubsidy = defPayout * COIN;
+
+    srand(time(NULL));
+    double rndNum = rand() % 100 + 1;
+
+    rndNum /= 100.0;
+
+    if( rndNum >= 99.0)
+    {
+	    nSubsidy = bigPayout * COIN; //1% of the time give a big payout
+    }
+    else if( rndNum >= 89.0)
+    {
+	    nSubsidy = medPayout * COIN; //10% of the time give medium payout
+    }
+    else if( rndNum >= 39.0)
+    {
+	    nSubsidy = smallPayout * COIN; //50 % of the time give the small payout
+    }
+    else
+    {
+	    nSubsidy = defPayout * COIN; //39% of the time give the default payout
+    }
+
 
     return nSubsidy + nFees;
 }
 
 static const int64 nTargetTimespan = 1 * 24 * 60 * 60; // Obsidian: 1 days
-static const int64 nTargetSpacing = 120; // Obsidian: 2 minute blocks
+static const int64 nTargetSpacing = 60; // Obsidian: 2 minute blocks
 static const int64 nInterval = nTargetTimespan / nTargetSpacing;
 
 // Thanks: Balthazar for suggesting the following fix
